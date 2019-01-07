@@ -46,6 +46,4 @@ class ManagerTests: XCTestCase {
         manager.addPhoto(Photo(isSample: true))
         XCTAssertEqual(manager.numPhotos(), numPhotosBeforeAdd + 1)
     }
-
-
 }

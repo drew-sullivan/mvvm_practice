@@ -15,28 +15,46 @@ protocol SessionProtocol {
     -> URLSessionDataTask
 }
 
-struct APIClient {
+enum JSONPlaceholderType: String {
+    case posts = "posts"
+    case comments = "comments"
+    case albums = "albums"
+    case photos = "photos"
+    case todos = "todos"
+    case users = "users"
+}
+
+enum JSONPlaceholderQuery: String {
+    case limit = "_limit"
+}
+
+class APIClient {
     
     lazy var session: SessionProtocol = URLSession.shared
     
-    mutating func fetchData(completion: @escaping ([Photo]?, Error?) -> Void) {
-        guard let url = URL(string: "https://jsonplaceholder.typicode.com/photos") else { fatalError() }
+    func fetchItems(ofType type: JSONPlaceholderType, withQuery query: JSONPlaceholderQuery, numItems num: Int, completion: @escaping ([Photo]?, Error?) -> Void) {
+        guard num > 0 else { fatalError() }
+        guard let url = URL(string: "https://jsonplaceholder.typicode.com/\(type)?\(query)=\(num)") else { fatalError() }
+        
         session.dataTask(with: url) { (data, response, error) in
+            
             guard error == nil else {
                 completion(nil, error)
                 return
             }
+            
             guard let data = data else {
                 completion(nil, WebserviceError.DataEmptyError)
                 return
             }
-            let photos: [Photo]?
+            
             do {
-                photos = try JSONDecoder().decode([Photo].self, from: data)
+                let photos = try JSONDecoder().decode([Photo].self, from: data)
                 completion(photos, nil)
             } catch {
                 completion(nil, error)
             }
+            
         }.resume()
     }
     

@@ -34,71 +34,95 @@ class APITests: XCTestCase {
         
         super.tearDown()
     }
-
-    func test_fetchData_creates_photo_array() {
+    
+    func test_fetchItems_uses_expected_host() {
+        let completion = { (photos: [Photo]?, error: Error?) in }
+        apiClient.fetchItems(ofType: .photos, withQuery: .limit, numItems: 20, completion: completion)
+        
+        XCTAssertEqual(mockURLSession.urlComponents?.host, "jsonplaceholder.typicode.com")
+    }
+    
+    func test_fetchItems_uses_expected_path() {
+        let completion = { (photos: [Photo]?, error: Error?) in }
+        apiClient.fetchItems(ofType: .photos, withQuery: .limit, numItems: 20, completion: completion)
+        
+        XCTAssertEqual(mockURLSession.urlComponents?.path, "/photos")
+    }
+    
+    func test_fetchItems_uses_expected_query() {
+        let completion = { (photos: [Photo]?, error: Error?) in }
+        apiClient.fetchItems(ofType: .photos, withQuery: .limit, numItems: 20, completion: completion)
+        
+        XCTAssertEqual(mockURLSession.urlComponents?.query, "limit=20")
+    }
+    
+    func test_fetchItems_when_successful_creates_items() {
         mockURLSession = MockURLSession(data: mockJSONData, urlResponse: nil, error: nil)
         apiClient.session = mockURLSession
         
-        let photoExpectation = expectation(description: "Photo")
-        var receivedPhotos: [Photo]?
-        apiClient.fetchData { (photos, _) in
-            receivedPhotos = photos
-            photoExpectation.fulfill()
+        let photosExpectation = expectation(description: "Photos")
+        var caughtPhotos: [Photo]? = nil
+        
+        apiClient.fetchItems(ofType: .photos, withQuery: .limit, numItems: 10) { (photos, _) in
+            caughtPhotos = photos
+            photosExpectation.fulfill()
         }
         waitForExpectations(timeout: 1) { _ in
-            XCTAssertNotNil(receivedPhotos)
-            XCTAssert(receivedPhotos!.count > 0, "Not enough photos added")
+            XCTAssertNotNil(caughtPhotos)
         }
     }
     
-    func test_fetchData_when_JSON_is_invalid_returns_error() {
+    func test_fetchItems_when_json_is_invalid_returns_error() {
         mockURLSession = MockURLSession(data: Data(), urlResponse: nil, error: nil)
         apiClient.session = mockURLSession
         
         let errorExpectation = expectation(description: "Error")
-        
         var caughtError: Error? = nil
-        apiClient.fetchData { (photo, error) in
+        
+        apiClient.fetchItems(ofType: .photos, withQuery: .limit, numItems: 10) { (photos, error) in
             caughtError = error
             errorExpectation.fulfill()
+            XCTAssertNil(photos)
         }
-        
-        waitForExpectations(timeout: 1) { error in
+        waitForExpectations(timeout: 1) { _ in
             XCTAssertNotNil(caughtError)
         }
     }
     
-    func test_fetchData_when_response_has_error_returns_error() {
+    func test_fetchItems_when_data_is_nil_returns_error() {
+        mockURLSession = MockURLSession(data: nil, urlResponse: nil, error: nil)
+        apiClient.session = mockURLSession
+        
+        let errorExpectation = expectation(description: "Error")
+        var caughtError: Error? = nil
+        
+        apiClient.fetchItems(ofType: .photos, withQuery: .limit, numItems: 10) { (photos, error) in
+            caughtError = error
+            errorExpectation.fulfill()
+            XCTAssertNil(photos)
+        }
+        waitForExpectations(timeout: 1) { _ in
+            XCTAssertNotNil(caughtError)
+        }
+    }
+    
+    func test_fetchItems_when_response_has_error_returns_error() {
         let error = NSError(domain: "SomeError", code: 1234, userInfo: nil)
         
         mockURLSession = MockURLSession(data: mockJSONData, urlResponse: nil, error: error)
         apiClient.session = mockURLSession
         
         let errorExpectation = expectation(description: "Error")
-        
         var caughtError: Error? = nil
-        apiClient.fetchData { (photo, error) in
+        
+        apiClient.fetchItems(ofType: .photos, withQuery: .limit, numItems: 10) { (photos, error) in
             caughtError = error
             errorExpectation.fulfill()
+            XCTAssertNil(photos)
         }
-        
-        waitForExpectations(timeout: 1) { error in
+        waitForExpectations(timeout: 1) { _ in
             XCTAssertNotNil(caughtError)
         }
-    }
-    
-    func test_APIClient_uses_expected_host() {
-        let completion = { (photo: [Photo]?, error: Error?) in }
-        apiClient.fetchData(completion: completion)
-
-        XCTAssertEqual(mockURLSession.urlComponents?.host, "jsonplaceholder.typicode.com")
-    }
-
-    func test_APIClient_uses_expected_path_for_photos() {
-        let completion = { (photo: [Photo]?, error: Error?) in }
-        apiClient.fetchData(completion: completion)
-
-        XCTAssertEqual(mockURLSession.urlComponents?.path, "/photos")
     }
 
 }
