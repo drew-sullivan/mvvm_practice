@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3ADBD60A21E53FBC0024F86D /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADBD60921E53FBC0024F86D /* PhotoCell.swift */; };
 		7C931EB721DE747E00E208EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C931EB621DE747E00E208EF /* AppDelegate.swift */; };
 		7C931EBC21DE747E00E208EF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C931EBA21DE747E00E208EF /* Main.storyboard */; };
 		7C931EBE21DE748100E208EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C931EBD21DE748100E208EF /* Assets.xcassets */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3ADBD60921E53FBC0024F86D /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		7C931EB321DE747E00E208EF /* MVVMSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MVVMSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C931EB621DE747E00E208EF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C931EBB21DE747E00E208EF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				7C931EC221DE748100E208EF /* Info.plist */,
 				7C931EFC21E3E94800E208EF /* ItemListViewController.swift */,
 				7C931F0121E3EDC700E208EF /* ItemListDataProvider.swift */,
+				3ADBD60921E53FBC0024F86D /* PhotoCell.swift */,
 			);
 			path = MVVMSample;
 			sourceTree = "<group>";
@@ -133,9 +136,9 @@
 				7C931EFE21E3EA9D00E208EF /* Networking */,
 				7C931EF921E3E88400E208EF /* Model */,
 				7C931EFA21E3E8CB00E208EF /* ItemListViewControllerTest.swift */,
+				7C931F0321E3F36400E208EF /* ItemListDataProviderTests.swift */,
 				7C931EF621DE9F8700E208EF /* ManagerTests.swift */,
 				7C931ECD21DE748100E208EF /* Info.plist */,
-				7C931F0321E3F36400E208EF /* ItemListDataProviderTests.swift */,
 			);
 			path = MVVMSampleTests;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3ADBD60A21E53FBC0024F86D /* PhotoCell.swift in Sources */,
 				7C931EB721DE747E00E208EF /* AppDelegate.swift in Sources */,
 				7C931F0221E3EDC700E208EF /* ItemListDataProvider.swift in Sources */,
 				7C931EE821DE94B400E208EF /* APIClient.swift in Sources */,
